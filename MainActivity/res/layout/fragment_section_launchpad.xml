@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_up"
-            android:text="Buccaneer Printing Progress: 60%"
+            android:text="Print Queue"
             android:textAlignment="center"
             android:textColor="@android:color/background_light" 
             android:background="@android:color/holo_blue_light"/>
