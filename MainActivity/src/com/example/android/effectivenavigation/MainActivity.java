@@ -41,6 +41,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -65,8 +67,12 @@ public class MainActivity extends FragmentActivity implements
 	WifiScanReceiver wifiReciever;
 	ListView list;
 	static String wifis[];
-	static Context appContext; 
+	static Context appContext;
 	static ProgressBar spinner;
+
+	static String ssid;
+	static int tab;
+
 	/**
 	 * The {@link ViewPager} that will display the three primary sections of the
 	 * app, one at a time.
@@ -145,6 +151,7 @@ public class MainActivity extends FragmentActivity implements
 			FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
+		MainActivity.tab = tab.getPosition();
 		if (tab.getPosition() == 1) {
 			spinner = (ProgressBar) findViewById(R.id.progressBar1);
 			mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
@@ -174,6 +181,63 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1) {
+			if (resultCode == RESULT_OK) {
+				String result = data.getStringExtra("result");
+				if(result != null && MainActivity.ssid != null)
+					ConnectToNetwork(MainActivity.ssid, result);
+			}
+			if (resultCode == RESULT_CANCELED) {
+				// Write your code if there's no result
+			}
+		}
+	}// onActivityResult
+
+	private void ConnectToNetwork(String ssid, String pass) {
+		// =>check if the network has been previously
+		// connected to
+		// =>use remembered password to connect to network
+		// =>or launch QR code scan activity to get the
+		// password
+
+		String networkSSID = ssid;
+		String networkPass = pass;
+
+		WifiConfiguration conf = new WifiConfiguration();
+		conf.SSID = "\"" + networkSSID + "\""; // Please
+												// note the
+												// quotes.
+												// String
+												// should
+												// contain
+												// ssid in
+												// quotes
+		conf.preSharedKey = "\"" + networkPass + "\"";
+		mainWifiObj.addNetwork(conf);
+
+		List<WifiConfiguration> list = mainWifiObj.getConfiguredNetworks();
+		boolean result = false;
+		for (WifiConfiguration i : list) {
+			if (i.SSID != null && i.SSID.equals("\"" + networkSSID + "\"")) {
+				mainWifiObj.disconnect();
+				mainWifiObj.enableNetwork(i.networkId, true);
+				result = mainWifiObj.reconnect();
+				break;
+			}
+		}
+		// =>connect to the network
+		// =>display a toast message if successful
+		if (result == true) {
+			Toast.makeText(appContext, "Connection Succeeded",
+					Toast.LENGTH_LONG).show();
+		} else {
+			Toast.makeText(appContext, "Connection Failed", Toast.LENGTH_LONG)
+					.show();
+		}
+
 	}
 
 	public static void Refresh() {
@@ -319,7 +383,6 @@ public class MainActivity extends FragmentActivity implements
 						@Override
 						public void onClick(View view) {
 							// do something when the search button is pressed
-
 							MainActivity.Refresh();
 							return;
 						}
@@ -329,54 +392,22 @@ public class MainActivity extends FragmentActivity implements
 					new View.OnClickListener() {
 						@Override
 						public void onClick(View view) {
-							// =>check if the network has been previously
-							// connected to
-							// =>use remembered password to connect to network
-							// =>or launch QR code scan activity to get the
-							// password
-
-							String networkSSID = "Piracy Central";
-							String networkPass = "fattitan";
-
-							WifiConfiguration conf = new WifiConfiguration();
-							conf.SSID = "\"" + networkSSID + "\""; // Please
-																	// note the
-																	// quotes.
-																	// String
-																	// should
-																	// contain
-																	// ssid in
-																	// quotes
-							conf.preSharedKey = "\"" + networkPass + "\"";
-							mainWifiObj.addNetwork(conf);
-
-							List<WifiConfiguration> list = mainWifiObj
-									.getConfiguredNetworks();
-							boolean result=false;
-							for (WifiConfiguration i : list) {
-								if (i.SSID != null
-										&& i.SSID.equals("\"" + networkSSID
-												+ "\"")) {
-									mainWifiObj.disconnect();
-									mainWifiObj
-											.enableNetwork(i.networkId, true);
-									result = mainWifiObj.reconnect();
-									break;
-								}
-							}
-							// =>connect to the network
-							// =>display a toast message if successful
-							if(result == true)
-							{
-								Toast.makeText(appContext, "Connection Succeeded", 
-										   Toast.LENGTH_LONG).show();
-							}else{
-								Toast.makeText(appContext, "Connection Failed", 
-										   Toast.LENGTH_LONG).show();
-							}
+							Intent intent = new Intent(getActivity(),
+									CameraTestActivity.class);
+							getActivity().startActivityForResult(intent, 1);
 							return;
 						}
 					});
+
+			final ListView lview = (ListView) rootView
+					.findViewById(R.id.listView1);
+			lview.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					MainActivity.ssid = (String) lview.getItemAtPosition(position);
+				}
+			});
 			return rootView;
 		}
 	}
@@ -393,6 +424,8 @@ public class MainActivity extends FragmentActivity implements
 	class WifiScanReceiver extends BroadcastReceiver {
 
 		public void onReceive(Context c, Intent intent) {
+			if(MainActivity.tab!=1)
+				return;
 			List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
 			wifis = new String[wifiScanList.size()];
 			if (wifiScanList != null) {
@@ -405,7 +438,7 @@ public class MainActivity extends FragmentActivity implements
 				ListView lview = (ListView) findViewById(R.id.listView1);
 				if (spinner != null)
 					spinner.setVisibility(View.GONE);
-					lview.setAdapter(adapter);
+				lview.setAdapter(adapter);
 			}
 		}
 	}

@@ -175,6 +175,10 @@ public class CameraTestActivity extends Activity {
 				for (Symbol sym : syms) {
 					scanText.setText("barcode result " + sym.getData());
 					barcodeScanned = true;
+					Intent returnIntent = new Intent();
+					returnIntent.putExtra("result", sym.getData());
+					setResult(RESULT_OK,returnIntent);
+					finish();
 				}
 			}
 		}
