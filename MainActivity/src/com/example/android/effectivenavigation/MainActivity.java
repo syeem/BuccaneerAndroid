@@ -19,13 +19,18 @@ package com.example.android.effectivenavigation;
 import java.util.List;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
@@ -40,6 +45,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -80,6 +87,7 @@ public class MainActivity extends FragmentActivity implements
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 		MainActivity.appContext = getApplicationContext();
 		// Create the adapter that will return a fragment for each of the three
@@ -102,6 +110,7 @@ public class MainActivity extends FragmentActivity implements
 				.parseColor("#ffffff")));
 		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color
 				.parseColor("#ffffff")));
+		
 		// Set up the ViewPager, attaching the adapter and setting up a listener
 		// for when the
 		// user swipes between sections.
@@ -186,7 +195,7 @@ public class MainActivity extends FragmentActivity implements
 		if (requestCode == 1) {
 			if (resultCode == RESULT_OK) {
 				String result = data.getStringExtra("result");
-				if(result != null && MainActivity.ssid != null)
+				if (result != null && MainActivity.ssid != null)
 					ConnectToNetwork(MainActivity.ssid, result);
 			}
 			if (resultCode == RESULT_CANCELED) {
@@ -404,7 +413,8 @@ public class MainActivity extends FragmentActivity implements
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					MainActivity.ssid = (String) lview.getItemAtPosition(position);
+					MainActivity.ssid = (String) lview
+							.getItemAtPosition(position);
 				}
 			});
 			return rootView;
@@ -423,7 +433,7 @@ public class MainActivity extends FragmentActivity implements
 	class WifiScanReceiver extends BroadcastReceiver {
 
 		public void onReceive(Context c, Intent intent) {
-			if(MainActivity.tab!=1)
+			if (MainActivity.tab != 1)
 				return;
 			List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
 			wifis = new String[wifiScanList.size()];

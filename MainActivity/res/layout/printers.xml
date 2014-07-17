@@ -63,7 +63,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@id/ViewColorPickerHelper"
-            android:background="@android:color/holo_blue_light"
+            android:background="@drawable/button_selector"
             android:text="@android:string/search_go" 
             android:textColor="@android:color/background_light"/>
 
@@ -75,7 +75,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/ViewColorPickerHelper"
-            android:background="@android:color/holo_blue_light"
+            android:background="@drawable/button_selector"
             android:text="@string/connect" 
             android:textColor="@android:color/background_light"/>
     </RelativeLayout>
