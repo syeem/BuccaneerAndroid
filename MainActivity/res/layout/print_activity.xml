@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Print Activity" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp" 
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/holo_blue_light"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip"
+            android:background="@android:color/holo_blue_dark" />
+
+        <View
+            android:id="@+id/ViewColorPickerHelper"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="@android:color/holo_blue_dark" />
+
+        <Button
+            android:id="@+id/BtnColorPickerCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/ViewColorPickerHelper"
+            android:background="@android:color/holo_blue_light"
+            android:text="@string/button_eject" 
+            android:textColor="@android:color/background_light"/>
+
+        <Button
+            android:id="@+id/BtnColorPickerOk"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/ViewColorPickerHelper"
+            android:background="@android:color/holo_blue_light"
+            android:text="@string/button_print" 
+            android:textColor="@android:color/background_light"/>
+    </RelativeLayout>
+
+</RelativeLayout>
