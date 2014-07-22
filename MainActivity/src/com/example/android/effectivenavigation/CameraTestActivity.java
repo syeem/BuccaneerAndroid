@@ -23,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.Button;
+import android.widget.Toast;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
@@ -66,7 +67,8 @@ public class CameraTestActivity extends Activity {
 
 		autoFocusHandler = new Handler();
 		mCamera = getCameraInstance();
-
+		Toast.makeText(getBaseContext(), "Scan the QR code at the back of the printer to connect to the network",
+				Toast.LENGTH_LONG).show();
 		/* Instance barcode scanner */
 		scanner = new ImageScanner();
 		scanner.setConfig(0, Config.X_DENSITY, 3);

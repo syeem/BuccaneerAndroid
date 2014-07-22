@@ -3,6 +3,7 @@
 	<name>MainActivity</name>
 	<comment></comment>
 	<projects>
+		<project>cardslib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

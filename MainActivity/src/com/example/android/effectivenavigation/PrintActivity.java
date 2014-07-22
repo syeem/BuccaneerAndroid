@@ -1,5 +1,7 @@
 package com.example.android.effectivenavigation;
 
+import pirate3d.buccaneer.ti.TIImageDownloader;
+import pirate3d.buccaneer.ti.TIProduct;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,12 +12,14 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class PrintActivity extends FragmentActivity {
 
-	String wifis[];
+	TIProduct product;
+	
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,16 +31,20 @@ public class PrintActivity extends FragmentActivity {
 				.parseColor("#ffffff")));
 		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color
 				.parseColor("#ffffff")));
-		this.wifis = (String[]) getIntent().getSerializableExtra("wifis");
-
+		
 		// Specify that the Home button should show an "Up" caret, indicating
 		// that touching the
 		// button will take the user one step up in the application's hierarchy.
 		actionBar.setDisplayHomeAsUpEnabled(true);
-
+		String position = (String)getIntent().getSerializableExtra("selectedPosition");
+		int p = Integer.parseInt(position);
+		this.product = TIConnection.productCollection.get(p);
 		TextView view = (TextView) findViewById(R.id.textview1);
-		view.setText(wifis[0]);
-
+		view.setText(this.product.description);
+		ImageView imgView = (ImageView)findViewById(R.id.imageView1);
+		TIImageDownloader downloader = new TIImageDownloader(this.product.imageSquare, imgView);
+		downloader.execute();
+		
 		findViewById(R.id.BtnColorPickerOk).setOnClickListener(
 				new View.OnClickListener() {
 					@Override

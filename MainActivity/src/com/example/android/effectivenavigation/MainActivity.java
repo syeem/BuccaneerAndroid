@@ -16,21 +16,19 @@
 
 package com.example.android.effectivenavigation;
 
+import java.io.Serializable;
 import java.util.List;
 
+import pirate3d.buccaneer.ti.TIProduct;
+import pirate3d.buccaneer.ui.RowItem;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
@@ -45,8 +43,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -75,9 +71,12 @@ public class MainActivity extends FragmentActivity implements
 	static String wifis[];
 	static Context appContext;
 	static ProgressBar spinner;
-
+	static ListView TI_listview;
 	static String ssid;
 	static int tab;
+
+	static TIConnection ti;
+	static List<RowItem> rowItems;
 
 	/**
 	 * The {@link ViewPager} that will display the three primary sections of the
@@ -110,7 +109,7 @@ public class MainActivity extends FragmentActivity implements
 				.parseColor("#ffffff")));
 		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color
 				.parseColor("#ffffff")));
-		
+
 		// Set up the ViewPager, attaching the adapter and setting up a listener
 		// for when the
 		// user swipes between sections.
@@ -140,13 +139,6 @@ public class MainActivity extends FragmentActivity implements
 					.setText(mAppSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-
-		mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		wifiReciever = new WifiScanReceiver();
-		Intent n = registerReceiver(wifiReciever, new IntentFilter(
-				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-		mainWifiObj.startScan();
-
 	}
 
 	@Override
@@ -279,6 +271,9 @@ public class MainActivity extends FragmentActivity implements
 			case 2:
 				return new SettingsTab();
 
+			case 3:
+				return new TreasureIslandTab();
+
 			default:
 				// The other sections of the app are dummy placeholders.
 				Fragment fragment = new DummySectionFragment();
@@ -291,18 +286,20 @@ public class MainActivity extends FragmentActivity implements
 
 		@Override
 		public int getCount() {
-			return 4;
+			return 3;
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
 			switch (position) {
 			case 0:
-				return "Treasure Island";
+				return "LaunchPad";
 			case 1:
 				return "Printers";
 			case 2:
-				return "Settings";
+				return "TreasureIsland";
+			case 3:
+				return "Treasure Island";
 			default:
 				return "Section " + (position + 1);
 			}
@@ -370,6 +367,7 @@ public class MainActivity extends FragmentActivity implements
 						public void onClick(View view) {
 							Intent intent = new Intent(getActivity(),
 									CameraTestActivity.class);
+							
 							startActivity(intent);
 						}
 					});
@@ -421,11 +419,41 @@ public class MainActivity extends FragmentActivity implements
 		}
 	}
 
+	public static class TreasureIslandTab extends Fragment {
+		public View OnCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+
+			View rootView = inflater.inflate(R.layout.treasure_island,
+					container, false);
+
+			return rootView;
+		}
+	}
+	
 	public static class SettingsTab extends Fragment {
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.settings, container,
+			View rootView = inflater.inflate(R.layout.treasure_island, container,
 					false);
+			MainActivity.TI_listview = (ListView) rootView.findViewById(R.id.listView2);
+			TI_listview.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(getActivity(),
+							PrintActivity.class);
+					Bundle b = new Bundle();
+					String p = Integer.toString(position);
+					b.putSerializable("selectedPosition", (Serializable) p);
+					intent.putExtras(b);
+					startActivity(intent);
+				}
+			});
+			// load products from treasure island
+			ti = new TIConnection();
+			ti.execute();
+
 			return rootView;
 		}
 	}
@@ -436,11 +464,25 @@ public class MainActivity extends FragmentActivity implements
 			if (MainActivity.tab != 1)
 				return;
 			List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
-			wifis = new String[wifiScanList.size()];
+			String temp_wifis[] = new String[wifiScanList.size()];
+			int j = 0;
 			if (wifiScanList != null) {
 				for (int i = 0; i < wifiScanList.size(); i++) {
-					wifis[i] = ((wifiScanList.get(i)).SSID);
+					String networkId = (wifiScanList.get(i)).SSID;
+					if (networkId.contains("Buccaneer")) {
+						temp_wifis[j] = ((wifiScanList.get(i)).SSID);
+						j++;
+					}
 				}
+				wifis = new String[j];
+				for (int i = 0; i < j; i++)
+					wifis[i] = temp_wifis[i];
+
+				if (j == 0)
+					Toast.makeText(getBaseContext(),
+							"No printers are available on the network",
+							Toast.LENGTH_LONG).show();
+
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 						getApplicationContext(),
 						android.R.layout.simple_list_item_1, wifis);
