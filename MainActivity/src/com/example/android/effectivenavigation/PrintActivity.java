@@ -1,7 +1,10 @@
 package com.example.android.effectivenavigation;
 
+import java.util.ArrayList;
+
 import pirate3d.buccaneer.ti.TIImageDownloader;
 import pirate3d.buccaneer.ti.TIProduct;
+import pirate3d.buccaneer.ti.TIProductDetail;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,14 +15,19 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListPopupWindow;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnDismissListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class PrintActivity extends FragmentActivity {
 
-	TIProduct product;
-	
+	static TIProduct product;
+	public static ArrayList<String> stlFileNames;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,28 +39,69 @@ public class PrintActivity extends FragmentActivity {
 				.parseColor("#ffffff")));
 		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color
 				.parseColor("#ffffff")));
-		
+
 		// Specify that the Home button should show an "Up" caret, indicating
 		// that touching the
 		// button will take the user one step up in the application's hierarchy.
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		String position = (String)getIntent().getSerializableExtra("selectedPosition");
-		int p = Integer.parseInt(position);
-		this.product = TIConnection.productCollection.get(p);
-		TextView view = (TextView) findViewById(R.id.textview1);
-		view.setText(this.product.description);
-		ImageView imgView = (ImageView)findViewById(R.id.imageView1);
-		TIImageDownloader downloader = new TIImageDownloader(this.product.imageSquare, imgView);
-		downloader.execute();
-		
-		findViewById(R.id.BtnColorPickerOk).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						// do something
 
+		String position = (String) getIntent().getSerializableExtra(
+				"selectedPosition");
+		int p = Integer.parseInt(position);
+		PrintActivity.product = TIConnection.productCollection.get(p);
+
+		TextView view = (TextView) findViewById(R.id.textview1);
+		view.setText(PrintActivity.product.description);
+		ImageView imgView = (ImageView) findViewById(R.id.imageView1);
+
+		TIImageDownloader downloader = new TIImageDownloader(
+				PrintActivity.product.imageSquare, imgView);
+		downloader.execute();
+
+		stlFileNames = new ArrayList<>();
+		TIProductDetail productDetail = new TIProductDetail(
+				PrintActivity.product);
+		productDetail.execute();
+
+		final ListPopupWindow popupWindow = new ListPopupWindow(
+				getApplicationContext());
+		popupWindow.setAnchorView(view);
+		popupWindow.setWidth(ListPopupWindow.WRAP_CONTENT);
+		popupWindow.setHeight(ListPopupWindow.WRAP_CONTENT);
+		popupWindow.setModal(true);
+
+		popupWindow
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						// start new activity for printing the selected file
+						if (PrintActivity.stlFileNames != null) {
+							Intent intent = new Intent(getApplicationContext(),
+							PrintPreviewActivity.class);
+							int stlId = PrintActivity.product.printObjects.get(position).id;
+							intent.putExtra("id", Integer.toString(stlId));
+							startActivity(intent);
+						}
 					}
 				});
+
+		findViewById(R.id.Print).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				// display a list of stl to select from if there are multiple
+				// stl files
+				// send to printer for printing
+
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+						getApplicationContext(),
+						android.R.layout.simple_list_item_1,
+						PrintActivity.stlFileNames);
+				popupWindow.setAdapter(adapter);
+				popupWindow.show();
+			}
+		});
 
 		findViewById(R.id.BtnColorPickerCancel).setOnClickListener(
 				new View.OnClickListener() {
@@ -95,7 +144,7 @@ public class PrintActivity extends FragmentActivity {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// Check which request we're responding to
-		
+
 	}
 
 }

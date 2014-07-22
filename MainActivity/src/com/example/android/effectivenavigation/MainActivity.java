@@ -440,7 +440,6 @@ public class MainActivity extends FragmentActivity implements
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					// TODO Auto-generated method stub
 					Intent intent = new Intent(getActivity(),
 							PrintActivity.class);
 					Bundle b = new Bundle();

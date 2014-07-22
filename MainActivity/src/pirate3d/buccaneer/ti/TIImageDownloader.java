@@ -25,6 +25,7 @@ public class TIImageDownloader extends AsyncTask<Void,Void,Integer>{
 			try{
 			URL url = new URL(this.imageUrl);
 			Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+			//move back to UI thread using callback functions
 			this.imageView.setImageBitmap(bmp);
 			return 1;
 			}catch(Exception e)

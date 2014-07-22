@@ -53,16 +53,17 @@ public final class R {
     }
     public static final class id {
         public static final int BtnColorPickerCancel=0x7f070016;
-        public static final int BtnColorPickerOk=0x7f070017;
+        public static final int Print=0x7f070017;
+        public static final int PrintPreviewText=0x7f070018;
         public static final int ScanButton=0x7f070004;
         public static final int ViewColorPickerHelper=0x7f070015;
         public static final int cameraPreview=0x7f070002;
         public static final int camera_activity_button=0x7f070008;
         public static final int card=0x7f070010;
-        public static final int cardList=0x7f070026;
-        public static final int checkBox1=0x7f07001f;
-        public static final int checkBox2=0x7f070020;
-        public static final int connect_button=0x7f07001b;
+        public static final int cardList=0x7f070027;
+        public static final int checkBox1=0x7f070020;
+        public static final int checkBox2=0x7f070021;
+        public static final int connect_button=0x7f07001c;
         public static final int content=0x7f07000a;
         public static final int demo_collection_button=0x7f070005;
         public static final int demo_external_activity=0x7f070006;
@@ -71,24 +72,24 @@ public final class R {
         public static final int handle=0x7f07000b;
         public static final int icon=0x7f07000d;
         public static final int imageView1=0x7f070013;
-        public static final int listView1=0x7f070018;
+        public static final int listView1=0x7f070019;
         public static final int listView2=0x7f07000c;
         public static final int list_image=0x7f070011;
-        public static final int numberPicker1=0x7f070025;
+        public static final int numberPicker1=0x7f070026;
         public static final int pager=0x7f070000;
         public static final int pager_title_strip=0x7f070001;
         public static final int print_activity=0x7f070007;
-        public static final int progressBar1=0x7f070019;
-        public static final int radio0=0x7f070022;
-        public static final int radio1=0x7f070023;
-        public static final int radio2=0x7f070024;
-        public static final int radioGroup1=0x7f070021;
+        public static final int progressBar1=0x7f07001a;
+        public static final int radio0=0x7f070023;
+        public static final int radio1=0x7f070024;
+        public static final int radio2=0x7f070025;
+        public static final int radioGroup1=0x7f070022;
         public static final int scanText=0x7f070003;
-        public static final int search=0x7f07001a;
-        public static final int seekBar1=0x7f07001e;
+        public static final int search=0x7f07001b;
+        public static final int seekBar1=0x7f07001f;
         public static final int slidingDrawer1=0x7f070009;
-        public static final int switch1=0x7f07001c;
-        public static final int switch2=0x7f07001d;
+        public static final int switch1=0x7f07001d;
+        public static final int switch2=0x7f07001e;
         public static final int textview1=0x7f070014;
         public static final int title=0x7f07000e;
     }
@@ -105,21 +106,23 @@ public final class R {
         public static final int list_item=0x7f030006;
         public static final int list_row=0x7f030007;
         public static final int print_activity=0x7f030008;
-        public static final int printers=0x7f030009;
-        public static final int settings=0x7f03000a;
-        public static final int ti_cards=0x7f03000b;
-        public static final int treasure_island=0x7f03000c;
+        public static final int print_preview=0x7f030009;
+        public static final int printers=0x7f03000a;
+        public static final int settings=0x7f03000b;
+        public static final int ti_cards=0x7f03000c;
+        public static final int treasure_island=0x7f03000d;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
-        public static final int button_eject=0x7f050009;
-        public static final int button_print=0x7f050008;
+        public static final int button_eject=0x7f05000a;
+        public static final int button_print=0x7f050009;
         public static final int connect=0x7f050007;
         public static final int demo_collection=0x7f050003;
         public static final int demo_external_activity=0x7f050002;
         public static final int dummy_section_text=0x7f050001;
         public static final int print=0x7f050005;
         public static final int print_activity=0x7f050004;
+        public static final int print_preview=0x7f050008;
         public static final int scan_qr=0x7f050006;
     }
     public static final class style {

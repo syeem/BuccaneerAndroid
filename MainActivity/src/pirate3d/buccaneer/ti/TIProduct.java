@@ -1,5 +1,7 @@
 package pirate3d.buccaneer.ti;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,8 +12,10 @@ public class TIProduct {
 	public String description;
 	String imageSmall;
 	String imageRegular;
+	public String hash;
 	public String imageSquare;
-	
+	public ArrayList<TIPrintObject> printObjects;
+	public ArrayList<TIPhotos> photos;
 	TIUser user;
 	
 	public TIProduct(JSONObject product)
@@ -23,10 +27,12 @@ public class TIProduct {
 		this.imageSmall  = product.getString("image_small");
 		this.imageRegular  = product.getString("image_regular");
 		this.imageSquare  = product.getString("image_square");
+		this.hash = product.getString("hash");
 		JSONObject jsonUser = product.getJSONObject("user");
 		this.user = new TIUser(jsonUser);
 		}catch(JSONException e)
 		{
+			e.printStackTrace();
 			return;
 		}
 	}

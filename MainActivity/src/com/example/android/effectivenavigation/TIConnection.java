@@ -19,7 +19,6 @@ import pirate3d.buccaneer.ti.TIProduct;
 import pirate3d.buccaneer.ui.CustomListViewAdapter;
 import pirate3d.buccaneer.ui.RowItem;
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
 
 class TIConnection extends AsyncTask<Void, Void, Integer> {
 
@@ -40,15 +39,7 @@ class TIConnection extends AsyncTask<Void, Void, Integer> {
 		String[] products = GetProductNames();
 		if (products == null)
 			return;
-		/*ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				MainActivity.appContext, android.R.layout.simple_list_item_1,
-				products);
-
-		// if (spinner != null)
-		// spinner.setVisibility(View.GONE);
-		if (MainActivity.TI_listview != null)
-			MainActivity.TI_listview.setAdapter(adapter);
-		*/
+		
 		rowItems = new ArrayList<RowItem>();
 		for (int i = 0; i < products.length; i++) {
 			TIProduct p = productCollection.get(i);
@@ -104,7 +95,6 @@ class TIConnection extends AsyncTask<Void, Void, Integer> {
 				TIProduct product = new TIProduct(obj);
 				TIConnection.productCollection.add(product);
 			}
-
 		} catch (JSONException e) {
 			return 0;
 		}
