@@ -15,40 +15,47 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.android.effectivenavigation.PrintActivity;
-
+import pirate3d.buccaneer.ui.ImagePagerAdapter;
 import android.os.AsyncTask;
 
-public class TIProductDetail extends AsyncTask <Void, Void, Integer>{
-	
+public class TIProductDetail extends AsyncTask<Void, Void, Integer> {
+
 	TIProduct product;
 
 	InputStream is = null;
 	String result = "";
-	
-	public TIProductDetail(TIProduct p)
-	{
+
+	public TIProductDetail(TIProduct p) {
 		this.product = p;
 	}
-	
-	
-	protected void onPostExecute(Integer result){
-		if(PrintActivity.stlFileNames==null)
+
+	protected void onPostExecute(Integer result) {
+		if (PrintActivity.stlFileNames == null)
 			return;
-		for(int i=0;i<this.product.printObjects.size();i++)
-		{
-			PrintActivity.stlFileNames.add(this.product.printObjects.get(i).fileName);
-		}
+
+		for (int i = 0; i < this.product.printObjects.size(); i++)
+			PrintActivity.stlFileNames
+					.add(this.product.printObjects.get(i).fileName);
+
+		String[] imageUrls = new String[this.product.photos.size()];
+		for (int i = 0; i < this.product.photos.size(); i++)
+			imageUrls[i] = this.product.photos.get(i).regular;
+
+		PrintActivity.pager.setAdapter(new ImagePagerAdapter(
+				PrintActivity.appContext, imageUrls));
+		PrintActivity.pager.setCurrentItem(0);
+
 	}
-	
+
 	@Override
 	protected Integer doInBackground(Void... params) {
-		
+
 		// HTTP
 		try {
 			HttpClient httpclient = new DefaultHttpClient(); // for port 80
 																// requests!
-			HttpGet httppost = new HttpGet(
-					"http://www.treasure.is/v1/product/" + this.product.hash);
+			HttpGet httppost = new HttpGet("http://www.treasure.is/v1/product/"
+					+ this.product.hash);
 			HttpResponse response = httpclient.execute(httppost);
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();

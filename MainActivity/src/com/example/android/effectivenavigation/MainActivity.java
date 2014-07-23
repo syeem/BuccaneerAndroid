@@ -19,7 +19,13 @@ package com.example.android.effectivenavigation;
 import java.io.Serializable;
 import java.util.List;
 
-import pirate3d.buccaneer.ti.TIProduct;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+
 import pirate3d.buccaneer.ui.RowItem;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
@@ -71,13 +77,15 @@ public class MainActivity extends FragmentActivity implements
 	static String wifis[];
 	static Context appContext;
 	static ProgressBar spinner;
+	static ProgressBar TIspinner;
 	static ListView TI_listview;
 	static String ssid;
 	static int tab;
 
 	static TIConnection ti;
 	static List<RowItem> rowItems;
-
+	
+	
 	/**
 	 * The {@link ViewPager} that will display the three primary sections of the
 	 * app, one at a time.
@@ -139,6 +147,25 @@ public class MainActivity extends FragmentActivity implements
 					.setText(mAppSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+		initImageLoader(getApplicationContext());
+
+	}
+
+	public static void initImageLoader(Context context) {
+		// This configuration tuning is custom. You can tune every option, you may tune some of them,
+		// or you can create default configuration by
+		//  ImageLoaderConfiguration.createDefault(this);
+		// method.
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+				.threadPriority(Thread.NORM_PRIORITY - 2)
+				.denyCacheImageMultipleSizesInMemory()
+				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
+				.diskCacheSize(50 * 1024 * 1024) // 50 Mb
+				.tasksProcessingOrder(QueueProcessingType.LIFO)
+				.writeDebugLogs() // Remove for release app
+				.build();
+		// Initialize ImageLoader with configuration.
+		ImageLoader.getInstance().init(config);
 	}
 
 	@Override
@@ -436,6 +463,8 @@ public class MainActivity extends FragmentActivity implements
 			View rootView = inflater.inflate(R.layout.treasure_island, container,
 					false);
 			MainActivity.TI_listview = (ListView) rootView.findViewById(R.id.listView2);
+			MainActivity.TIspinner = (ProgressBar) rootView.findViewById(R.id.loadingTI);
+			MainActivity.TIspinner.setVisibility(View.VISIBLE);
 			TI_listview.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,

@@ -11,7 +11,7 @@ public class TIProduct {
 	public String productName;
 	public String description;
 	String imageSmall;
-	String imageRegular;
+	public String imageRegular;
 	public String hash;
 	public String imageSquare;
 	public ArrayList<TIPrintObject> printObjects;

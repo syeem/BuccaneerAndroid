@@ -2,6 +2,8 @@ package pirate3d.buccaneer.ti;
 
 import java.net.URL;
 
+import com.example.android.effectivenavigation.PrintPreviewActivity;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,6 +13,7 @@ public class TIImageDownloader extends AsyncTask<Void,Void,Integer>{
 
 	String imageUrl;
 	ImageView imageView;
+	Bitmap bmp;
 	
 	public TIImageDownloader(String imageUrl, ImageView imageView)
 	{
@@ -18,15 +21,19 @@ public class TIImageDownloader extends AsyncTask<Void,Void,Integer>{
 		this.imageView = imageView;
 	}
 	
+	protected void onPostExecute(Integer result) {
+		this.imageView.setImageBitmap(bmp);
+	}
+
 	@Override
 	protected Integer doInBackground(Void... params) {
 		if(imageUrl !=null)
 		{
 			try{
 			URL url = new URL(this.imageUrl);
-			Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+			bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 			//move back to UI thread using callback functions
-			this.imageView.setImageBitmap(bmp);
+			
 			return 1;
 			}catch(Exception e)
 			{

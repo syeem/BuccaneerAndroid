@@ -15,4 +15,13 @@
         android:fitsSystemWindows="true"
         android:listSelector="@android:color/holo_blue_light" >
     </ListView>
+
+    <ProgressBar
+        android:id="@+id/loadingTI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:visibility="gone" 
+        android:background="@drawable/spinner_color"/>
 </RelativeLayout>

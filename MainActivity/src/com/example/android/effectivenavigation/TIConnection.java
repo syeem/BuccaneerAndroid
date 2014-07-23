@@ -16,9 +16,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import pirate3d.buccaneer.ti.TIProduct;
-import pirate3d.buccaneer.ui.CustomListViewAdapter;
+import pirate3d.buccaneer.ui.ItemAdapter;
 import pirate3d.buccaneer.ui.RowItem;
 import android.os.AsyncTask;
+import android.view.View;
 
 class TIConnection extends AsyncTask<Void, Void, Integer> {
 
@@ -47,10 +48,14 @@ class TIConnection extends AsyncTask<Void, Void, Integer> {
             rowItems.add(item);
         }
  
-        CustomListViewAdapter adapter = new CustomListViewAdapter(MainActivity.appContext,
+        /*CustomListViewAdapter adapter = new CustomListViewAdapter(MainActivity.appContext,
+                R.layout.list_item, rowItems);*/
+		
+		ItemAdapter adapter = new ItemAdapter(MainActivity.appContext,
                 R.layout.list_item, rowItems);
         if(MainActivity.TI_listview!=null)
         	MainActivity.TI_listview.setAdapter(adapter);
+        MainActivity.TIspinner.setVisibility(View.GONE);
 	}
 
 	@Override

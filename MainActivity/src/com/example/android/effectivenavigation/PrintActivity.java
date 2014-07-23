@@ -2,17 +2,22 @@ package com.example.android.effectivenavigation;
 
 import java.util.ArrayList;
 
-import pirate3d.buccaneer.ti.TIImageDownloader;
 import pirate3d.buccaneer.ti.TIProduct;
 import pirate3d.buccaneer.ti.TIProductDetail;
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SlidingPaneLayout.LayoutParams;
+import android.text.method.ScrollingMovementMethod;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,11 +33,13 @@ public class PrintActivity extends FragmentActivity {
 
 	static TIProduct product;
 	public static ArrayList<String> stlFileNames;
-
+	public static Context appContext;
+	public static ViewPager pager;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.print_activity);
-
+		PrintActivity.appContext = getApplicationContext();
 		// Specify the color of the action/tab bar
 		final ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color
@@ -43,21 +50,24 @@ public class PrintActivity extends FragmentActivity {
 		// Specify that the Home button should show an "Up" caret, indicating
 		// that touching the
 		// button will take the user one step up in the application's hierarchy.
-		actionBar.setDisplayHomeAsUpEnabled(true);
-
+		//actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.hide();
+		
+		PrintActivity.pager = (ViewPager) findViewById(R.id.pager);
 		String position = (String) getIntent().getSerializableExtra(
 				"selectedPosition");
 		int p = Integer.parseInt(position);
 		PrintActivity.product = TIConnection.productCollection.get(p);
 
-		TextView view = (TextView) findViewById(R.id.textview1);
+		TextView view = (TextView) findViewById(R.id.descriptionText);
+		view.setMovementMethod(new ScrollingMovementMethod());
 		view.setText(PrintActivity.product.description);
-		ImageView imgView = (ImageView) findViewById(R.id.imageView1);
+		/*ImageView imgView = (ImageView) findViewById(R.id.imageView1);
 
 		TIImageDownloader downloader = new TIImageDownloader(
-				PrintActivity.product.imageSquare, imgView);
+				PrintActivity.product.imageRegular, imgView);
 		downloader.execute();
-
+*/
 		stlFileNames = new ArrayList<>();
 		TIProductDetail productDetail = new TIProductDetail(
 				PrintActivity.product);
@@ -110,7 +120,7 @@ public class PrintActivity extends FragmentActivity {
 						// do something
 					}
 				});
-
+		
 	}
 
 	@Override
