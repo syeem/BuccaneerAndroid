@@ -38,6 +38,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -84,8 +85,7 @@ public class MainActivity extends FragmentActivity implements
 
 	static TIConnection ti;
 	static List<RowItem> rowItems;
-	
-	
+
 	/**
 	 * The {@link ViewPager} that will display the three primary sections of the
 	 * app, one at a time.
@@ -148,19 +148,21 @@ public class MainActivity extends FragmentActivity implements
 					.setTabListener(this));
 		}
 		initImageLoader(getApplicationContext());
-
+		mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 	}
 
 	public static void initImageLoader(Context context) {
-		// This configuration tuning is custom. You can tune every option, you may tune some of them,
+		// This configuration tuning is custom. You can tune every option, you
+		// may tune some of them,
 		// or you can create default configuration by
-		//  ImageLoaderConfiguration.createDefault(this);
+		// ImageLoaderConfiguration.createDefault(this);
 		// method.
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-				.threadPriority(Thread.NORM_PRIORITY - 2)
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				context).threadPriority(Thread.NORM_PRIORITY - 2)
 				.denyCacheImageMultipleSizesInMemory()
 				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
-				.diskCacheSize(50 * 1024 * 1024) // 50 Mb
+				.diskCacheSize(50 * 1024 * 1024)
+				// 50 Mb
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
 				.writeDebugLogs() // Remove for release app
 				.build();
@@ -181,7 +183,6 @@ public class MainActivity extends FragmentActivity implements
 		MainActivity.tab = tab.getPosition();
 		if (tab.getPosition() == 1) {
 			spinner = (ProgressBar) findViewById(R.id.progressBar1);
-			mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 			wifiReciever = new WifiScanReceiver();
 			Intent n = registerReceiver(wifiReciever, new IntentFilter(
 					WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
@@ -260,6 +261,7 @@ public class MainActivity extends FragmentActivity implements
 		if (result == true) {
 			Toast.makeText(appContext, "Connection Succeeded",
 					Toast.LENGTH_LONG).show();
+
 		} else {
 			Toast.makeText(appContext, "Connection Failed", Toast.LENGTH_LONG)
 					.show();
@@ -350,7 +352,11 @@ public class MainActivity extends FragmentActivity implements
 						@Override
 						public void onClick(View view) {
 							Intent intent = new Intent(getActivity(),
-									CollectionDemoActivity.class);
+									ConnectPrinterActivity.class);
+
+							WifiInfo wifiInfo = mainWifiObj.getConnectionInfo();
+							intent.putExtra("initialNetwork",
+									wifiInfo.getSSID());
 							startActivity(intent);
 						}
 					});
@@ -394,7 +400,7 @@ public class MainActivity extends FragmentActivity implements
 						public void onClick(View view) {
 							Intent intent = new Intent(getActivity(),
 									CameraTestActivity.class);
-							
+
 							startActivity(intent);
 						}
 					});
@@ -456,14 +462,16 @@ public class MainActivity extends FragmentActivity implements
 			return rootView;
 		}
 	}
-	
+
 	public static class SettingsTab extends Fragment {
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.treasure_island, container,
-					false);
-			MainActivity.TI_listview = (ListView) rootView.findViewById(R.id.listView2);
-			MainActivity.TIspinner = (ProgressBar) rootView.findViewById(R.id.loadingTI);
+			View rootView = inflater.inflate(R.layout.treasure_island,
+					container, false);
+			MainActivity.TI_listview = (ListView) rootView
+					.findViewById(R.id.listView2);
+			MainActivity.TIspinner = (ProgressBar) rootView
+					.findViewById(R.id.loadingTI);
 			MainActivity.TIspinner.setVisibility(View.VISIBLE);
 			TI_listview.setOnItemClickListener(new OnItemClickListener() {
 				@Override

@@ -65,6 +65,9 @@
         <activity
             android:name=".CameraTestActivity"
             android:label="@string/scan_qr" />
+        <activity
+            android:name=".ConnectPrinterActivity"
+            android:label="@string/connect_printer" />
     </application>
 
 </manifest>

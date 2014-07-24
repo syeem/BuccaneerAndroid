@@ -27,6 +27,7 @@
     <string name="scan_qr">Scan QR Code</string>
     <string name="connect">Connect</string>
     <string name="print_preview">Print Preview</string>
+    <string name="connect_printer">Connect to Printer</string>
     
     <string name="button_print">Print</string>
     <string name="button_eject">Eject Filament</string>
