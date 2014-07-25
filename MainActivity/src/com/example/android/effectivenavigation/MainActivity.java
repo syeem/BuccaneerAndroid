@@ -334,7 +334,7 @@ public class MainActivity extends FragmentActivity implements
 			case 1:
 				return "Printers";
 			case 2:
-				return "TreasureIsland";
+				return "Treasure Island";
 			case 3:
 				return "Treasure Island";
 			default:
