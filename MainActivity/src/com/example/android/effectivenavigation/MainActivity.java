@@ -19,12 +19,11 @@ package com.example.android.effectivenavigation;
 import java.io.Serializable;
 import java.util.List;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import pirate3d.buccaneer.ui.RowItem;
 import android.animation.ObjectAnimator;
@@ -118,6 +117,15 @@ public class MainActivity extends FragmentActivity implements
 		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color
 				.parseColor("#ffffff")));
 
+		SlidingMenu menu = new SlidingMenu(this);
+		menu.setMode(SlidingMenu.LEFT);
+		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		menu.setShadowWidth(150);
+		menu.setShadowDrawable(R.drawable.shadow);
+		menu.setBehindOffset(60);
+        menu.setFadeDegree(0.35f);
+        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        menu.setMenu(R.layout.sliding_menu);
 		// Set up the ViewPager, attaching the adapter and setting up a listener
 		// for when the
 		// user swipes between sections.
