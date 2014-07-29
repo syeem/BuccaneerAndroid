@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+  <item android:id="@+id/action_sliding_menu_icon"
+    android:icon="@drawable/ic_slidingmenu"
+    android:title="@string/actionbar_slidingmenu"
+    android:showAsAction="always"/>
+</menu>

@@ -30,8 +30,6 @@ class TIConnection extends AsyncTask<Void, Void, Integer> {
 
 	static ArrayList<TIProduct> productCollection;
 	boolean ProductsAvailable = false;
-
-	
 	List<RowItem> rowItems;
 	
 	protected void onPostExecute(Integer result) {
@@ -116,4 +114,5 @@ class TIConnection extends AsyncTask<Void, Void, Integer> {
 		}
 		return products;
 	}
+	
 }

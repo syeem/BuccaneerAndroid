@@ -46,9 +46,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
+import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -84,7 +90,8 @@ public class MainActivity extends FragmentActivity implements
 
 	static TIConnection ti;
 	static List<RowItem> rowItems;
-
+	
+	static SlidingMenu slidingMenu;
 	/**
 	 * The {@link ViewPager} that will display the three primary sections of the
 	 * app, one at a time.
@@ -108,7 +115,6 @@ public class MainActivity extends FragmentActivity implements
 		// Specify that the Home/Up button should not be enabled, since there is
 		// no hierarchical parent.
 		actionBar.setHomeButtonEnabled(false);
-
 		// Specify that we will be displaying tabs in the action bar.
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		// Specify the color of the action/tab bar
@@ -117,15 +123,18 @@ public class MainActivity extends FragmentActivity implements
 		actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color
 				.parseColor("#ffffff")));
 
-		SlidingMenu menu = new SlidingMenu(this);
-		menu.setMode(SlidingMenu.LEFT);
-		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		menu.setShadowWidth(150);
-		menu.setShadowDrawable(R.drawable.shadow);
-		menu.setBehindOffset(60);
-        menu.setFadeDegree(0.35f);
-        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-        menu.setMenu(R.layout.sliding_menu);
+		slidingMenu = new SlidingMenu(this);
+		slidingMenu.setMode(SlidingMenu.RIGHT);
+		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		slidingMenu.setShadowWidth(150);
+		slidingMenu.setShadowDrawable(R.drawable.shadow);
+		slidingMenu.setBehindOffset(60);
+		slidingMenu.setFadeDegree(0.35f);
+		slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
+		slidingMenu.setSecondaryMenu(R.layout.sliding_menu);
+		//slidingMenu.setBackgroundResource(R.drawable.buccaneer);
+		slidingMenu.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+
 		// Set up the ViewPager, attaching the adapter and setting up a listener
 		// for when the
 		// user swipes between sections.
@@ -159,6 +168,24 @@ public class MainActivity extends FragmentActivity implements
 		mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 	}
 
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		int itemId = item.getItemId();
+		if(itemId==R.id.action_sliding_menu_icon)
+		{
+			if(MainActivity.slidingMenu.isMenuShowing()==false)
+			{
+				MainActivity.slidingMenu.showMenu();
+			}
+			else
+			{
+				MainActivity.slidingMenu.showContent();
+			}
+		}
+	    return true;
+	}
+	
 	public static void initImageLoader(Context context) {
 		// This configuration tuning is custom. You can tune every option, you
 		// may tune some of them,
@@ -218,7 +245,14 @@ public class MainActivity extends FragmentActivity implements
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 	}
-
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.layout.actionbar, menu);
+	    return true;
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 1) {
 			if (resultCode == RESULT_OK) {
@@ -558,4 +592,5 @@ public class MainActivity extends FragmentActivity implements
 			return rootView;
 		}
 	}
+	
 }

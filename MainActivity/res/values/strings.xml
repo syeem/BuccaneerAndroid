@@ -31,4 +31,5 @@
     
     <string name="button_print">Print</string>
     <string name="button_eject">Eject Filament</string>
+    <string name="actionbar_slidingmenu">Open Sliding Menu</string>
 </resources>
